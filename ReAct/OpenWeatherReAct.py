@@ -10,7 +10,7 @@ import requests
 import json
 
 load_dotenv()
-api_key = os.getenv("API_KEY")
+api_key = os.getenv("GOOGLE_API_KEY")
 key_open_weather = os.getenv("KEY_API_WEATHER")
 
 @tool
@@ -26,11 +26,10 @@ def get_weather(city: str) -> str:
     description = data[0]['weather'][0]['description']
     return f"Em {city}, a temperatura é de {temp:.2f}°C e o clima está {description}."
 
-llm = ChatGoogleGenerativeAI(model="gemini-2.5-pro", temperature=0.7, google_api_key=api_key)
+llm = ChatGoogleGenerativeAI(model="gemini-2.5-flash", temperature=0.7, google_api_key=api_key)
 
 agent = create_react_agent(llm, [get_weather])
-human_input = "Qual a previsão do tempo para hoje a noite em Campo Mourão?"
+human_input = input("Usuário: ")
 response = agent.invoke({"messages": human_input})
 
-print(f"Usuario: {human_input}")
 print(f"Agente: {response["messages"][-1].content}")
